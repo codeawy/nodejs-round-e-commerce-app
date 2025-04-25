@@ -1,6 +1,8 @@
 import express, { Express } from "express";
 import path from "path";
+import helmet from "helmet";
 import { initializeJsonFile } from "./utils/fileUtils";
+import { corsConfig } from "./middlewares/security.middleware";
 
 const app: Express = express();
 
@@ -13,7 +15,11 @@ try {
   process.exit(1);
 }
 
-const PORT = process.env.PORT || 5000;
+// ** Security middlewares -> apply thse before route handlers
+app.use(helmet()); // ** Set security-related HTTP headers
+app.use(corsConfig); // ** custom CORS config
+
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
